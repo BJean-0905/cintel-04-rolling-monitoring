@@ -138,7 +138,7 @@ def main() -> None:
     )
 
     # ----------------------------------------------------
-    # STEP 3.4: DEFINE ROLLING MEAN FOR LATENCY
+    # STEP 3.3: DEFINE ROLLING MEAN FOR LATENCY
     # ----------------------------------------------------
     # The `total_latency_ms` column holds the total latency in milliseconds at each timestamp.
     latency_rolling_mean_recipe: pl.Expr = (
@@ -148,7 +148,7 @@ def main() -> None:
     )
 
     # ----------------------------------------------------
-    # STEP 3.5: APPLY THE ROLLING RECIPES IN A NEW DATAFRAME
+    # STEP 3.4: APPLY THE ROLLING RECIPES IN A NEW DATAFRAME
     # ----------------------------------------------------
     # with_columns() evaluates the recipes and adds the new columns
     df_with_rolling = df.with_columns(
