@@ -130,7 +130,18 @@ def main() -> None:
     )
 
     # ----------------------------------------------------
-    # STEP 3.2: DEFINE ROLLING MEAN FOR # OF ERRORS
+    # STEP 3.2: DEFINE STANDARD DEVIATION FOR # OF REQUESTS
+    # ----------------------------------------------------
+    # The standard deviation of the `requests` column can indicate variability in request volume.
+    requests_rolling_std_recipe: pl.Expr = (
+        pl.col("requests")
+        .rolling_std(WINDOW_SIZE)
+        .round(0)
+        .alias("requests_rolling_std")
+    )
+
+    # ----------------------------------------------------
+    # STEP 3.3: DEFINE ROLLING MEAN FOR # OF ERRORS
     # ----------------------------------------------------
     # The `errors` column holds the count of errors encountered at each timestamp.
     errors_rolling_mean_recipe: pl.Expr = (
@@ -138,7 +149,15 @@ def main() -> None:
     )
 
     # ----------------------------------------------------
-    # STEP 3.3: DEFINE ROLLING MEAN FOR LATENCY
+    # STEP 3.2: DEFINE STANDARD DEVIATION FOR # OF ERRORS
+    # ----------------------------------------------------
+    # The standard deviation of the `errors` column can indicate variability in request volume.
+    errors_rolling_std_recipe: pl.Expr = (
+        pl.col("errors").rolling_std(WINDOW_SIZE).round(0).alias("errors_rolling_std")
+    )
+
+    # ----------------------------------------------------
+    # STEP 3.4: DEFINE ROLLING MEAN FOR LATENCY
     # ----------------------------------------------------
     # The `total_latency_ms` column holds the total latency in milliseconds at each timestamp.
     latency_rolling_mean_recipe: pl.Expr = (
@@ -148,13 +167,15 @@ def main() -> None:
     )
 
     # ----------------------------------------------------
-    # STEP 3.4: APPLY THE ROLLING RECIPES IN A NEW DATAFRAME
+    # STEP 3.5: APPLY THE ROLLING RECIPES IN A NEW DATAFRAME
     # ----------------------------------------------------
     # with_columns() evaluates the recipes and adds the new columns
     df_with_rolling = df.with_columns(
         [
             requests_rolling_mean_recipe,
+            requests_rolling_std_recipe,
             errors_rolling_mean_recipe,
+            errors_rolling_std_recipe,
             latency_rolling_mean_recipe,
         ]
     )
