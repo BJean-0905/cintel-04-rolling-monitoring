@@ -34,7 +34,7 @@ reveal trends in time-series data.
 
 The example pipeline reads time-series system metrics from:
 
-`data/system_metrics_timeseries_case.csv`
+`data/system_metrics_timeseries_BJean0905.csv`
 
 Each row represents one observation at a specific timestamp.
 The pipeline computes rolling averages for requests, errors, and latency, then saves the monitoring results as an artifact.
@@ -112,7 +112,6 @@ uvx pre-commit install
 git add -A
 uvx pre-commit run --all-files
 
-uv run python -m cintel.rolling_monitor_case
 uv run python -m cintel.rolling_monitor_BJean0905
 
 uv run ruff format .
